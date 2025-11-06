@@ -1,0 +1,143 @@
+/* Mobile-First Responsive Tables with Sticky Headers */
+
+.mobile-table-container {
+  width: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 0.5rem;
+  border: 1px solid rgb(147 197 253 / 0.5);
+}
+
+.mobile-table {
+  width: 100%;
+  min-width: 100%;
+  border-collapse: collapse;
+  position: relative;
+}
+
+.mobile-table-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgb(219 234 254);
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  backdrop-filter: blur(8px);
+}
+
+.mobile-table-header th {
+  background: rgb(219 234 254);
+  border-bottom: 2px solid rgb(147 197 253);
+  padding: 0.5rem 0.5rem;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgb(30 64 175);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.mobile-table-body {
+  background: rgb(255 255 255 / 0.8);
+  backdrop-filter: blur(4px);
+}
+
+.mobile-table-body tr {
+  transition: background-color 0.2s ease;
+}
+
+.mobile-table-body tr:hover {
+  background: rgb(255 255 255 / 0.9);
+}
+
+.mobile-table-body td {
+  padding: 0.75rem 0.5rem;
+  border-bottom: 1px solid rgb(147 197 253 / 0.3);
+  font-size: 0.75rem;
+  color: rgb(30 64 175);
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 640px) {
+  .mobile-table-container {
+    max-height: 60vh;
+    margin: 0 -1rem;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+  
+  .mobile-table-header th {
+    padding: 0.5rem 0.25rem;
+    font-size: 0.625rem;
+  }
+  
+  .mobile-table-body td {
+    padding: 0.5rem 0.25rem;
+    font-size: 0.625rem;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .mobile-table-container {
+    max-height: 70vh;
+  }
+  
+  .mobile-table-header th {
+    padding: 0.75rem 1rem;
+    font-size: 0.75rem;
+  }
+  
+  .mobile-table-body td {
+    padding: 0.75rem 1rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Desktop adjustments */
+@media (min-width: 1025px) {
+  .mobile-table-container {
+    max-height: 80vh;
+  }
+  
+  .mobile-table-header th {
+    padding: 1rem 1.5rem;
+    font-size: 0.75rem;
+  }
+  
+  .mobile-table-body td {
+    padding: 1rem 1.5rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Utility classes for responsive visibility */
+.hide-mobile {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .hide-mobile {
+    display: table-cell;
+  }
+}
+
+.hide-tablet {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .hide-tablet {
+    display: table-cell;
+  }
+}
+
+.show-mobile-only {
+  display: block;
+}
+
+@media (min-width: 640px) {
+  .show-mobile-only {
+    display: none;
+  }
+}
