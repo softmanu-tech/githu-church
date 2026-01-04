@@ -6,10 +6,26 @@ import { cookies } from 'next/headers';
 import dbConnect from '@/lib/dbConnect';
 import { User } from '@/lib/models/User';
 
-const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
+export const dynamic = 'force-dynamic';
+
+// Validate JWT_SECRET at module level
+const JWT_SECRET = process.env.JWT_SECRET?.trim();
+if (!JWT_SECRET) {
+  console.error('❌ JWT_SECRET environment variable is not set!');
+}
 
 export async function POST(req: Request) {
   try {
+    // Validate JWT_SECRET at runtime
+    if (!JWT_SECRET) {
+      console.error('❌ JWT_SECRET is missing in environment variables');
+      return NextResponse.json(
+        { message: 'Server configuration error. Please contact administrator.' },
+        { status: 500 }
+      );
+    }
+
+    const secret = new TextEncoder().encode(JWT_SECRET);
     const { email, password } = await req.json();
 
     if (!email || !password) {
@@ -80,6 +96,21 @@ export async function POST(req: Request) {
     });
   } catch (error) {
     console.error('Login error:', error);
-    return NextResponse.json({ message: 'Login failed' }, { status: 500 });
+    
+    // Better error messages for debugging
+    let errorMessage = 'Login failed';
+    if (error instanceof Error) {
+      console.error('Error details:', error.message);
+      console.error('Error stack:', error.stack);
+      
+      // Check for specific error types
+      if (error.message.includes('MongoDB') || error.message.includes('connection')) {
+        errorMessage = 'Database connection error. Please try again.';
+      } else if (error.message.includes('JWT') || error.message.includes('secret')) {
+        errorMessage = 'Authentication service error. Please contact administrator.';
+      }
+    }
+    
+    return NextResponse.json({ message: errorMessage }, { status: 500 });
   }
 }
