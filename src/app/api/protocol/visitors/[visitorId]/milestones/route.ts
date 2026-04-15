@@ -34,19 +34,24 @@ export async function GET(
     const completedMilestones = visitor.milestones.filter((m: any) => m.completed).length;
     const monitoringProgress = Math.round((completedMilestones / 12) * 100);
 
+    const daysRemaining = visitor.monitoringEndDate
+      ? Math.max(0, Math.ceil((new Date(visitor.monitoringEndDate).getTime() - Date.now()) / 86400000))
+      : 0;
+
     return NextResponse.json({
       success: true,
       data: {
-        milestones: visitor.milestones,
-        monitoringProgress,
+        _id: String(visitor._id),
+        name: visitor.name,
+        email: visitor.email,
+        status: visitor.status,
         monitoringStatus: visitor.monitoringStatus,
-        visitor: {
-          id: visitor._id,
-          name: visitor.name,
-          type: visitor.type,
-          monitoringStartDate: visitor.monitoringStartDate,
-          monitoringEndDate: visitor.monitoringEndDate
-        }
+        monitoringStartDate: visitor.monitoringStartDate,
+        monitoringEndDate: visitor.monitoringEndDate,
+        daysRemaining,
+        milestones: visitor.milestones,
+        integrationChecklist: visitor.integrationChecklist,
+        monitoringProgress
       }
     });
   } catch (error: unknown) {

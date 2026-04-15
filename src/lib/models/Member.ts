@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document, Model } from "mongoose"
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
 
 export interface IMember extends Document {
   _id: mongoose.Types.ObjectId

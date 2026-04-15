@@ -49,20 +49,25 @@ export async function GET(request: Request) {
 
     await dbConnect();
 
-    // Ultra-optimized parallel queries
-    const [protocolMember, visitors] = await Promise.all([
-      User.findById(user.id).select('name email profilePicture protocolTeam').lean(),
-      Visitor.find({
-        $or: [
-          { assignedProtocolMember: user.id },
-          { protocolTeam: (user as any).protocolTeam }
-        ]
-      })
-      .select('name email phone address type status monitoringStatus attendanceRate monitoringProgress monitoringEndDate createdAt')
+    // Fetch protocol member first so we can use their protocolTeam in the visitor query
+    const protocolMember = await User.findById(user.id)
+      .select('name email profilePicture protocolTeam')
+      .lean();
+
+    const visitorQuery: any = { assignedProtocolMember: user.id };
+    if ((protocolMember as any)?.protocolTeam) {
+      visitorQuery.$or = [
+        { assignedProtocolMember: user.id },
+        { protocolTeam: (protocolMember as any).protocolTeam }
+      ];
+      delete visitorQuery.assignedProtocolMember;
+    }
+
+    const visitors = await Visitor.find(visitorQuery)
+      .select('name email phone address type status monitoringStatus monitoringEndDate createdAt visitHistory milestones')
       .sort({ createdAt: -1 })
-      .limit(100) // Limit for performance
-      .lean()
-    ]);
+      .limit(100)
+      .lean();
 
     if (!protocolMember) {
       return NextResponse.json({ 
@@ -78,15 +83,15 @@ export async function GET(request: Request) {
         .lean();
     }
 
-    // Calculate statistics using aggregation for speed
+    // Calculate statistics — check correct fields against the schema enums
     const stats = visitors.reduce((acc, visitor) => {
       acc.totalVisitors++;
-      if (visitor.type === 'joining') acc.joiningVisitors++;
-      if (visitor.type === 'visiting') acc.visitingOnly++;
-      if (visitor.status === 'monitoring') acc.activeMonitoring++;
-      if (visitor.status === 'completed') acc.completedMonitoring++;
-      if (visitor.status === 'converted') acc.convertedToMembers++;
-      if (visitor.status === 'needs-attention') acc.needsAttention++;
+      if (visitor.status === 'joining') acc.joiningVisitors++;
+      if (visitor.status === 'visiting') acc.visitingOnly++;
+      if (visitor.monitoringStatus === 'active') acc.activeMonitoring++;
+      if (visitor.monitoringStatus === 'completed') acc.completedMonitoring++;
+      if (visitor.monitoringStatus === 'converted-to-member') acc.convertedToMembers++;
+      if (visitor.monitoringStatus === 'needs-attention') acc.needsAttention++;
       return acc;
     }, {
       totalVisitors: 0,
@@ -110,21 +115,34 @@ export async function GET(request: Request) {
           description: (protocolTeam as any)?.description || 'Visitor management and integration team'
         }
       },
-      visitors: visitors.map(visitor => ({
-        _id: visitor._id,
-        name: visitor.name,
-        email: visitor.email,
-        phone: visitor.phone,
-        address: visitor.address,
-        type: visitor.type,
-        status: visitor.status,
-        monitoringStatus: visitor.monitoringStatus || 'inactive',
-        attendanceRate: visitor.attendanceRate || 0,
-        monitoringProgress: visitor.monitoringProgress || 0,
-        daysRemaining: visitor.monitoringEndDate ? 
-          Math.max(0, Math.ceil((new Date(visitor.monitoringEndDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))) : 0,
-        createdAt: visitor.createdAt
-      })),
+      visitors: visitors.map(visitor => {
+        // Compute virtuals manually since lean() skips them
+        const visitHistory: any[] = (visitor as any).visitHistory || [];
+        const milestones: any[] = (visitor as any).milestones || [];
+        const presentCount = visitHistory.filter((v: any) => v.attendanceStatus === 'present').length;
+        const attendanceRate = visitHistory.length > 0
+          ? Math.round((presentCount / visitHistory.length) * 100) : 0;
+        const completedMilestones = milestones.filter((m: any) => m.completed).length;
+        const monitoringProgress = milestones.length > 0
+          ? Math.round((completedMilestones / 12) * 100) : 0;
+        const daysRemaining = visitor.monitoringEndDate
+          ? Math.max(0, Math.ceil((new Date(visitor.monitoringEndDate).getTime() - Date.now()) / 86400000))
+          : 0;
+        return {
+          _id: String(visitor._id), // Explicit string — prevents /undefined URLs
+          name: visitor.name,
+          email: visitor.email,
+          phone: visitor.phone,
+          address: visitor.address,
+          type: visitor.type,
+          status: visitor.status,
+          monitoringStatus: visitor.monitoringStatus || 'inactive',
+          attendanceRate,
+          monitoringProgress,
+          daysRemaining,
+          createdAt: visitor.createdAt
+        };
+      }),
       statistics: {
         ...stats,
         conversionRate

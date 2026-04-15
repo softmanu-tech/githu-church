@@ -441,7 +441,7 @@ export default function ProtocolDashboard() {
                 {/* Mobile Card Layout */}
                 <div className="block lg:hidden space-y-4">
                   {data.visitors.map((visitor) => (
-                    <div 
+                    <div
                       key={visitor._id}
                       className="animate-fade-in bg-white/80 rounded-lg border border-blue-200 p-4"
                     >
@@ -455,8 +455,8 @@ export default function ProtocolDashboard() {
                             )}
                           </div>
                           <div className="text-right">
-                            <span className={`px-2 py-1 rounded text-xs font-medium ${ 
-                              visitor.status === 'joining' ? 'bg-blue-100 text-blue-800' : 'bg-blue-100 text-blue-800'
+                            <span className={`px-2 py-1 rounded text-xs font-medium ${
+                              visitor.status === 'joining' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'
                             }`}>
                               {visitor.status}
                             </span>
@@ -467,7 +467,7 @@ export default function ProtocolDashboard() {
                             )}
                           </div>
                         </div>
-                        
+
                         {visitor.status === 'joining' && (
                           <div className="space-y-2">
                             <div className="flex justify-between text-sm">
@@ -475,19 +475,33 @@ export default function ProtocolDashboard() {
                               <span className="font-medium text-blue-800">{visitor.monitoringProgress}%</span>
                             </div>
                             <div className="w-full bg-blue-100 rounded-full h-2">
-                              <div 
+                              <div
                                 className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                                 style={{ width: `${visitor.monitoringProgress}%` }}
                               ></div>
                             </div>
                             <div className="flex justify-between text-xs text-blue-600">
                               <span>Attendance: {visitor.attendanceRate}%</span>
-                              <span className={visitor.monitoringStatus === 'active' ? 'text-blue-600' : 'text-blue-600'}>
-                                {visitor.monitoringStatus}
-                              </span>
+                              <span>{visitor.monitoringStatus}</span>
                             </div>
                           </div>
                         )}
+
+                        {/* Mobile action buttons */}
+                        <div className="flex gap-2 pt-1">
+                          <Link href={`/protocol/visitors/${visitor._id}`} className="flex-1">
+                            <Button size="sm" variant="outline" className="w-full text-xs border-blue-300 text-blue-800 hover:bg-blue-100">
+                              View Details
+                            </Button>
+                          </Link>
+                          {visitor.status === 'joining' && (
+                            <Link href={`/protocol/visitors/${visitor._id}/milestones`} className="flex-1">
+                              <Button size="sm" className="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs">
+                                Track
+                              </Button>
+                            </Link>
+                          )}
+                        </div>
                       </div>
                     </div>
                   ))}

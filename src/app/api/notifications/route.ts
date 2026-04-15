@@ -6,8 +6,12 @@ import { Notification } from '@/lib/models/Notification';
 // Get notifications for the current user
 export async function GET(request: Request) {
   try {
-    // Authenticate user (any role can access their notifications)
-    const { user } = await requireSessionAndRoles(request, ['bishop', 'leader', 'member']);
+    let user;
+    try {
+      ({ user } = await requireSessionAndRoles(request, ['bishop', 'leader', 'member']));
+    } catch {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
     if (!user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -70,8 +74,12 @@ export async function GET(request: Request) {
 // Create a notification (for system use)
 export async function POST(request: Request) {
   try {
-    // Only allow bishop to create notifications
-    const { user } = await requireSessionAndRoles(request, ['bishop']);
+    let user;
+    try {
+      ({ user } = await requireSessionAndRoles(request, ['bishop']));
+    } catch {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
     if (!user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -109,8 +117,12 @@ export async function POST(request: Request) {
 // Mark notifications as read
 export async function PUT(request: Request) {
   try {
-    // Authentication - all roles can update their notifications
-    const { user } = await requireSessionAndRoles(request, ['bishop', 'leader', 'member']);
+    let user;
+    try {
+      ({ user } = await requireSessionAndRoles(request, ['bishop', 'leader', 'member']));
+    } catch {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
     if (!user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }

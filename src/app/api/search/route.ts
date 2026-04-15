@@ -8,8 +8,12 @@ import { requireSessionAndRoles } from '@/lib/authMiddleware';
 
 export async function GET(request: Request) {
   try {
-    // Authentication - all roles can search, but results will be filtered by role
-    const { user } = await requireSessionAndRoles(request, ['bishop', 'leader', 'member']);
+    let user;
+    try {
+      ({ user } = await requireSessionAndRoles(request, ['bishop', 'leader', 'member']));
+    } catch {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
     if (!user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }

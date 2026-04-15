@@ -78,12 +78,12 @@ export async function GET(request: Request) {
 
     // Group performance analysis
     const groupPerformance = await Promise.all(groups.map(async (group) => {
-      const groupAttendance = attendanceRecords.filter(record => 
-        record.group._id.toString() === (group._id as any).toString()
+      const groupAttendance = attendanceRecords.filter(record =>
+        record.group && record.group._id.toString() === (group._id as any).toString()
       );
-      
-      const groupEvents = events.filter(event => 
-        event.group._id.toString() === (group._id as any).toString()
+
+      const groupEvents = events.filter(event =>
+        event.group && event.group._id.toString() === (group._id as any).toString()
       );
 
       const groupMembers = allMembers.filter(member => 
@@ -197,7 +197,7 @@ export async function GET(request: Request) {
         attendanceRate: Math.round(monthRate * 10) / 10,
         presentCount: monthPresent,
         totalEvents: monthAttendance.length,
-        activeGroups: new Set(monthAttendance.map(record => record.group._id.toString())).size
+        activeGroups: new Set(monthAttendance.filter(r => r.group).map(record => record.group._id.toString())).size
       });
     }
 

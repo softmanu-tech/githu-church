@@ -50,8 +50,8 @@ export async function GET(request: Request) {
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
     
     const recentFeedback = visitors.reduce((count, visitor) => {
-      const recentSuggestions = visitor.suggestions.filter((s: any) => new Date(s.date) >= thirtyDaysAgo).length;
-      const recentExperiences = visitor.experiences.filter((e: any) => new Date(e.date) >= thirtyDaysAgo).length;
+      const recentSuggestions = (visitor.suggestions || []).filter((s: any) => new Date(s.date) >= thirtyDaysAgo).length;
+      const recentExperiences = (visitor.experiences || []).filter((e: any) => new Date(e.date) >= thirtyDaysAgo).length;
       return count + recentSuggestions + recentExperiences;
     }, 0);
 
@@ -73,7 +73,7 @@ export async function GET(request: Request) {
 
     // Add recent feedback
     visitors.forEach(visitor => {
-      visitor.suggestions.slice(-2).forEach((suggestion: any) => {
+      (visitor.suggestions || []).slice(-2).forEach((suggestion: any) => {
         recentActivities.push({
           type: 'feedback',
           description: `Collected suggestion from ${visitor.name}`,
@@ -89,17 +89,18 @@ export async function GET(request: Request) {
     // Process visitors data for frontend
     const processedVisitors = visitors.map(visitor => {
       // Calculate monitoring progress
-      const completedMilestones = visitor.milestones.filter((m: any) => m.completed).length;
+      const completedMilestones = (visitor.milestones || []).filter((m: any) => m.completed).length;
       const monitoringProgress = Math.round((completedMilestones / 12) * 100);
-      
+
       // Calculate days remaining
       const startDate = visitor.monitoringStartDate ? new Date(visitor.monitoringStartDate) : new Date(visitor.createdAt);
       const endDate = new Date(startDate.getTime() + (90 * 24 * 60 * 60 * 1000)); // 90 days
       const daysRemaining = Math.max(0, Math.ceil((endDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)));
-      
-      // Calculate attendance rate (simplified)
-      const attendanceRate = visitor.visitHistory.length > 0 ? 
-        Math.round((visitor.visitHistory.filter((v: any) => v.attendanceStatus === 'present').length / visitor.visitHistory.length) * 100) : 0;
+
+      // Calculate attendance rate
+      const visitHistory = visitor.visitHistory || [];
+      const attendanceRate = visitHistory.length > 0 ?
+        Math.round((visitHistory.filter((v: any) => v.attendanceStatus === 'present').length / visitHistory.length) * 100) : 0;
 
       return {
         _id: visitor._id,
@@ -128,8 +129,8 @@ export async function GET(request: Request) {
           name: protocolMember.name,
           email: protocolMember.email,
           team: {
-            name: protocolMember.protocolTeam.name,
-            description: protocolMember.protocolTeam.description
+            name: (protocolMember.protocolTeam as any)?.name ?? 'Protocol Team',
+            description: (protocolMember.protocolTeam as any)?.description ?? ''
           }
         },
         visitors: processedVisitors,

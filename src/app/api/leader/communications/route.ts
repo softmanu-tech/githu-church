@@ -102,12 +102,6 @@ export async function POST(request: NextRequest) {
 
     await communication.save();
 
-    // If not scheduled, mark as sent
-    if (!scheduledFor) {
-      communication.sentAt = new Date();
-      await communication.save();
-    }
-
     return NextResponse.json({
       success: true,
       message: scheduledFor ? 'Communication scheduled successfully' : 'Communication sent successfully',

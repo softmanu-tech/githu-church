@@ -5,13 +5,23 @@ import { Notification } from '@/lib/models/Notification';
 
 export async function POST(request: Request) {
   try {
-    // Authenticate user (any role can mark their notifications as read)
-    const { user } = await requireSessionAndRoles(request, ['bishop', 'leader', 'member']);
+    let user;
+    try {
+      ({ user } = await requireSessionAndRoles(request, ['bishop', 'leader', 'member']));
+    } catch {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
     if (!user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { notificationIds, markAll } = await request.json();
+    let notificationIds: string[] | undefined;
+    let markAll: boolean | undefined;
+    try {
+      ({ notificationIds, markAll } = await request.json());
+    } catch {
+      return NextResponse.json({ error: 'Invalid or missing request body' }, { status: 400 });
+    }
     await dbConnect();
 
     if (markAll) {

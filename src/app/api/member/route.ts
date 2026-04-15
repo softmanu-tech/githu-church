@@ -16,9 +16,6 @@ export async function GET(request: Request) {
 
     await dbConnect();
 
-    // Ensure Group model is registered
-    const { Group } = await import('@/lib/models/Group');
-
     // Get the member's details with groups info
     const member = await User.findById(user.id)
       .populate('group', 'name') // Keep for backward compatibility
@@ -38,8 +35,8 @@ export async function GET(request: Request) {
       memberGroups.push(...member.groups);
     }
 
-    // Remove duplicates
-    const uniqueGroups = memberGroups.filter((group, index, self) => 
+    // Remove duplicates (guard against null entries from failed populates)
+    const uniqueGroups = memberGroups.filter(Boolean).filter((group, index, self) =>
       index === self.findIndex(g => g._id.toString() === group._id.toString())
     );
 
@@ -65,9 +62,11 @@ export async function GET(request: Request) {
       .limit(20);
 
     // Calculate attendance statistics
+    // Use string comparison to avoid ObjectId reference equality issues
+    const memberId = member._id.toString();
     const totalRecords = attendanceHistory.length;
-    const presentCount = attendanceHistory.filter(record => 
-      record.presentMembers.includes(member._id)
+    const presentCount = attendanceHistory.filter(record =>
+      record.presentMembers.some(id => id.toString() === memberId)
     ).length;
     const attendanceRate = totalRecords > 0 ? Math.round((presentCount / totalRecords) * 100) : 0;
 
@@ -75,8 +74,8 @@ export async function GET(request: Request) {
     const recentAttendance = attendanceHistory.slice(0, 10).map(record => ({
       _id: record._id,
       date: record.date,
-      event: record.event,
-      status: record.presentMembers.includes(member._id) ? 'present' : 'absent'
+      event: record.event || null,
+      status: record.presentMembers.some(id => id.toString() === memberId) ? 'present' : 'absent'
     }));
 
     return NextResponse.json({

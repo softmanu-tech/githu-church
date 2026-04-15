@@ -95,10 +95,10 @@ export default function Inbox() {
 
   const fetchUserRole = async () => {
     try {
-      const response = await fetch('/api/users');
+      const response = await fetch('/api/test-auth');
       const result = await response.json();
-      if (result.success && result.data.user) {
-        setUserRole(result.data.user.role);
+      if (result.success && result.user) {
+        setUserRole(result.user.role);
       }
     } catch (error) {
       console.error('Error fetching user role:', error);

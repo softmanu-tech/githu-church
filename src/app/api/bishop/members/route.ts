@@ -11,17 +11,17 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
   try {
-    // Ultra-fast caching check
-    const cacheKey = 'bishop-members';
-    const cachedData = getCachedData(cacheKey);
-    if (cachedData) {
-      return ultraFastResponse(cachedData, cacheKey);
-    }
-
-    // Strict Authentication
+    // Authentication must happen before any cache check
     const { user } = await requireSessionAndRoles(request, ['bishop']);
     if (!user?.id) {
       return ultraFastError('Unauthorized', 401);
+    }
+
+    // Cache is per-bishop to avoid leaking data across users
+    const cacheKey = `bishop-members-${user.id}`;
+    const cachedData = getCachedData(cacheKey);
+    if (cachedData) {
+      return ultraFastResponse(cachedData, cacheKey);
     }
 
     await dbConnect();
