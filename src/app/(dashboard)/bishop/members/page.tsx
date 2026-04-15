@@ -298,13 +298,13 @@ export default function BishopMembersPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-blue-300">
+      <div className="min-h-screen bg-blue-300 overflow-x-hidden">
         <ProfessionalHeader
           title="All Members Management"
           subtitle="Loading members data..."
         />
         
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-10">
           {/* Summary Stats Skeleton */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 mb-6">
             {Array.from({ length: 6 }).map((_, i) => (
@@ -354,7 +354,7 @@ export default function BishopMembersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-blue-300">
+    <div className="min-h-screen bg-blue-300 overflow-x-hidden">
       <ProfessionalHeader
         title="All Members Management"
         subtitle={`${data.summary.totalMembers} members across all groups`}
@@ -379,7 +379,7 @@ export default function BishopMembersPage() {
       />
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8 space-y-6">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-10 space-y-6">
         {/* Tabs */}
         <div className="bg-blue-200/90 backdrop-blur-md rounded-lg shadow-sm border border-blue-300 p-3 sm:p-4">
           <div className="flex space-x-1">

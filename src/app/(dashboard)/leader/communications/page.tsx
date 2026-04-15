@@ -118,7 +118,7 @@ export default function LeaderCommunicationsPage() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-blue-300">
+        <div className="min-h-screen bg-blue-300 overflow-x-hidden">
             <ProfessionalHeader
                 title="Group Communications"
                 subtitle={groupName ? `Send messages to members of ${groupName}` : "Send messages to your group members"}

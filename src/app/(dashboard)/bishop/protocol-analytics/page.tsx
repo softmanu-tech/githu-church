@@ -193,7 +193,7 @@ export default function ProtocolAnalyticsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-blue-300">
+      <div className="min-h-screen bg-blue-300 overflow-x-hidden">
         <ProfessionalHeader
           title="Protocol Teams Performance Analytics"
           subtitle="Loading analytics data..."
@@ -216,7 +216,7 @@ export default function ProtocolAnalyticsPage() {
         />
 
                 {/* Optimized Skeleton Loading */}
-                <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
+                <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-10">
                   {/* Overview Cards Skeleton */}
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-3 md:gap-4 mb-6">
                     {Array.from({ length: 6 }).map((_, i) => (
@@ -254,7 +254,7 @@ export default function ProtocolAnalyticsPage() {
 
   if (!data || data.churchStats.totalTeams === 0) {
     return (
-      <div className="min-h-screen bg-blue-300">
+      <div className="min-h-screen bg-blue-300 overflow-x-hidden">
         <ProfessionalHeader
           title="Protocol Teams Performance Analytics"
           subtitle="Analytics will appear once protocol teams are created"
@@ -283,7 +283,7 @@ export default function ProtocolAnalyticsPage() {
         />
 
         {/* Main Content */}
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-10">
           <div className="bg-blue-200/90 backdrop-blur-md border border-blue-300 rounded-lg shadow-sm p-6 sm:p-8">
             <div className="text-center">
               <div className="mb-6">
@@ -329,7 +329,7 @@ export default function ProtocolAnalyticsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-blue-300">
+    <div className="min-h-screen bg-blue-300 overflow-x-hidden">
       <ProfessionalHeader
         title="Protocol Teams Performance Analytics"
         subtitle={`Comprehensive analysis of ${data.churchStats.totalTeams} protocol teams managing ${data.churchStats.totalVisitors} visitors`}
@@ -352,7 +352,7 @@ export default function ProtocolAnalyticsPage() {
       />
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8 overflow-x-hidden">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-10 overflow-x-hidden">
         
         {/* Church-wide Overview */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-3 md:gap-4 mb-6">

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Rowdies, Cinzel } from "next/font/google";
 import "./globals.css";
 import Providers from "@/app/providers";
@@ -18,6 +18,12 @@ const cinzel = Cinzel({
     subsets: ["latin"],
     weight: ["400", "700", "900"], // Adjust weights as needed
 });
+
+export const viewport: Viewport = {
+    width: "device-width",
+    initialScale: 1,
+    viewportFit: "cover",   // allows content to extend under iPhone notch/safe-area
+}
 
 export const metadata: Metadata = {
     title: "G-45 Main - Church Management System",

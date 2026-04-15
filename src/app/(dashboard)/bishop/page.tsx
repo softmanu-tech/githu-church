@@ -412,7 +412,7 @@ export default function BishopDashboard() {
     }
 
     return (
-        <div className="min-h-screen bg-blue-300">
+        <div className="min-h-screen bg-blue-300 overflow-x-hidden">
             <ProfessionalHeader
                 title="Dashboard"
                 subtitle="Manage your church community"
@@ -477,6 +477,13 @@ export default function BishopDashboard() {
                         icon: <Heart className="h-3 w-3 sm:h-4 sm:w-4" />
                     },
                     {
+                        label: "Finance",
+                        href: "/bishop/finance",
+                        variant: "outline",
+                        className: "border-green-300 text-green-100 bg-green-600/20 hover:bg-green-600/30",
+                        icon: <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4" />
+                    },
+                    {
                         label: "Logout",
                         onClick: handleLogout,
                         variant: "outline",
@@ -487,7 +494,7 @@ export default function BishopDashboard() {
             />
 
             {/* Main Content */}
-            <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
+            <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-10">
                 <div className="animate-fade-in space-y-4 sm:space-y-6 md:space-y-8">
 
                     {/* Error State */}

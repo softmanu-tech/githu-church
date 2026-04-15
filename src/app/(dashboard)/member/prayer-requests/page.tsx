@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { UltraFastCardSkeleton, UltraFastChartSkeleton, UltraFastTableSkeleton, UltraFastStatsSkeleton, UltraFastPageSkeleton } from '@/components/ui/ultra-fast-skeleton';
 import { useAlerts } from "@/components/ui/alert-system"
 import { ProfessionalHeader } from "@/components/ProfessionalHeader"
+import { MemberNavStrip } from "@/components/MemberNav"
 
 import { format } from "date-fns"
 import {
@@ -253,7 +254,7 @@ export default function MemberPrayerRequestsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-blue-300">
+      <div className="min-h-screen bg-blue-300 overflow-x-hidden">
         <ProfessionalHeader
           title="Prayer Requests & Thanksgiving"
           subtitle="Submit and track your prayer requests"
@@ -292,8 +293,8 @@ export default function MemberPrayerRequestsPage() {
         ]}
       />
 
-      <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8 space-y-4 sm:space-y-6">
-        
+      <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 pb-6 sm:pb-8 space-y-5 sm:space-y-6">
+        <MemberNavStrip />
         {/* Tabs */}
         <div className="flex space-x-1 bg-blue-100 p-1 rounded-lg">
           <button

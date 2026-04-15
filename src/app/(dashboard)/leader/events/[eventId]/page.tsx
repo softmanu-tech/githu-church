@@ -114,13 +114,13 @@ export default function EventDetailsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-blue-300">
+      <div className="min-h-screen bg-blue-300 overflow-x-hidden">
         <ProfessionalHeader
           title="Event Details"
           subtitle="Loading event information..."
         />
         
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-10">
           {/* Event Details Skeleton */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
             <UltraFastCardSkeleton />
@@ -136,7 +136,7 @@ export default function EventDetailsPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-blue-300">
+      <div className="min-h-screen bg-blue-300 overflow-x-hidden">
         <ProfessionalHeader
           title="Event Details"
           subtitle="View event information and member responses"
@@ -161,7 +161,7 @@ export default function EventDetailsPage() {
 
   if (!data) {
     return (
-      <div className="min-h-screen bg-blue-300">
+      <div className="min-h-screen bg-blue-300 overflow-x-hidden">
         <ProfessionalHeader
           title="Event Details"
           subtitle="View event information and member responses"
@@ -186,7 +186,7 @@ export default function EventDetailsPage() {
   const isUpcoming = new Date(data.event.date) > new Date()
 
   return (
-    <div className="min-h-screen bg-blue-300">
+    <div className="min-h-screen bg-blue-300 overflow-x-hidden">
       <ProfessionalHeader
         title={data.event.title}
         subtitle="Event Details & Member Responses"
@@ -194,7 +194,7 @@ export default function EventDetailsPage() {
       />
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8 space-y-6">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-10 space-y-6">
         
         {/* Event Information */}
         <Card className="bg-blue-200/90 backdrop-blur-md border border-blue-300">

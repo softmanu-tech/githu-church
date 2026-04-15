@@ -1,5 +1,8 @@
 // lib/dbConnect.ts
 import mongoose, { Mongoose } from 'mongoose';
+// Importing all models here ensures they are registered with Mongoose on every
+// connection, including after Next.js hot-reloads clear the module registry.
+import './models/index';
 
 const MONGODB_URI = process.env.MONGODB_URI?.trim();
 

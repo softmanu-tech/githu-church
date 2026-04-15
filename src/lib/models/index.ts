@@ -25,3 +25,7 @@ export * from './PrayerRequest';
 
 // Thanksgiving model
 export * from './Thanksgiving';
+
+// Finance models
+export * from './FinanceCategory';
+export * from './FinanceContribution';

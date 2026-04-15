@@ -209,7 +209,7 @@ export default function GroupManagement() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-blue-300">
+        <div className="min-h-screen bg-blue-300 overflow-x-hidden">
             <ProfessionalHeader
                 title="Group Management"
                 subtitle="Create and manage church groups"

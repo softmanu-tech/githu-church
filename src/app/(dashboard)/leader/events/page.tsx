@@ -85,13 +85,13 @@ export default function LeaderEventsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-blue-300">
+      <div className="min-h-screen bg-blue-300 overflow-x-hidden">
         <ProfessionalHeader
           title="Events Management"
           subtitle="Loading events..."
         />
         
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-10">
           {/* Events Grid Skeleton */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {Array.from({ length: 6 }).map((_, i) => (
@@ -104,7 +104,7 @@ export default function LeaderEventsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-blue-300">
+    <div className="min-h-screen bg-blue-300 overflow-x-hidden">
       <ProfessionalHeader
         title="My Events"
         subtitle="Manage and track your group events"

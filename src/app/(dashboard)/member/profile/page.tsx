@@ -8,6 +8,7 @@ import { UltraFastCardSkeleton, UltraFastChartSkeleton, UltraFastTableSkeleton, 
 import { ProfileManager } from "@/components/ProfileManager"
 import { useAlerts } from "@/components/ui/alert-system"
 import { ProfessionalHeader } from "@/components/ProfessionalHeader"
+import { MemberNavStrip } from "@/components/MemberNav"
 
 interface UserProfile {
   _id: string
@@ -69,7 +70,7 @@ export default function MemberProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-blue-300">
+      <div className="min-h-screen bg-blue-300 overflow-x-hidden">
         <ProfessionalHeader
           title="Profile Settings"
           subtitle="Loading your profile..."
@@ -118,7 +119,7 @@ export default function MemberProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-blue-300">
+    <div className="min-h-screen bg-blue-300 overflow-x-hidden">
       <ProfessionalHeader
         title="Profile Settings"
         subtitle="Manage your personal information"
@@ -131,7 +132,8 @@ export default function MemberProfilePage() {
       />
 
       {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
+      <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 pb-6 sm:pb-8">
+        <MemberNavStrip />
         <ProfileManager
           user={user}
           canResetPasswords={false}

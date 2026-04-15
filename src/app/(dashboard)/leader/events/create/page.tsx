@@ -12,7 +12,7 @@ import { ProfessionalHeader } from "@/components/ProfessionalHeader"
 
 export default function CreateEventPage() {
     return (
-        <div className="min-h-screen bg-blue-300">
+        <div className="min-h-screen bg-blue-300 overflow-x-hidden">
             <ProfessionalHeader
                 title="Create New Event"
                 subtitle="Schedule a new event for your group"

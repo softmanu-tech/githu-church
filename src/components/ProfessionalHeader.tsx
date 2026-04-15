@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useRef, useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
@@ -36,75 +36,86 @@ export function ProfessionalHeader({
   backHref,
   className = ""
 }: ProfessionalHeaderProps) {
+  const headerRef = useRef<HTMLDivElement>(null)
+  const [headerHeight, setHeaderHeight] = useState(90)
+
+  // Measure actual header height so the spacer is always accurate,
+  // even when action buttons wrap to multiple lines on small screens.
+  useEffect(() => {
+    const el = headerRef.current
+    if (!el) return
+    setHeaderHeight(el.offsetHeight)
+    const observer = new ResizeObserver(() => setHeaderHeight(el.offsetHeight))
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  const nonLogoutActions = actions.filter(a => a.label !== "Logout")
+
   return (
     <>
-    <div className={`sticky-header bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 border-b border-blue-500 shadow-lg ${className}`}>
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
-        <div className="py-3 sm:py-4 md:py-6">
-          {/* Main Header Row */}
-          <div className="flex justify-between items-start gap-3 sm:gap-4">
-            
-            {/* Left Section - Logo, Title, Subtitle */}
-            <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
-              {/* Logo */}
-              <div className="animate-fade-in flex-shrink-0">
-                <div className="bg-white/20 backdrop-blur-md rounded-full p-2 shadow-lg border border-white/30">
-                  <Image
-                    src="/logo.jpg"
-                    alt="G-45 Main Logo"
-                    width={40}
-                    height={40}
-                    className="rounded-full object-cover"
-                    priority
-                  />
-                </div>
-              </div>
+      <div
+        ref={headerRef}
+        className={`sticky-header bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 border-b border-blue-500 shadow-lg ${className}`}
+      >
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+          <div className="py-3 sm:py-4 md:py-5">
 
-              {/* Title and Subtitle */}
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2 mb-1">
-                  <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white truncate">
-                    {title}
-                  </h1>
-                  <div className="hidden sm:block bg-white/20 px-2 py-1 rounded-full">
-                    <span className="text-xs font-medium text-white/90">G-45 Main</span>
-                  </div>
-                </div>
-                {subtitle && (
-                  <p className="text-xs sm:text-sm text-blue-100 truncate">
-                    {subtitle}
-                  </p>
-                )}
-              </div>
-            </div>
+            {/* ── Main row: logo · title · profile · logout ── */}
+            <div className="flex justify-between items-center gap-3 sm:gap-4">
 
-            {/* Right Section - Icons positioned on right side */}
-            <div className="flex flex-col lg:flex-row items-end lg:items-center gap-2 flex-shrink-0">
-              
-              {/* Profile Icon (smaller than logo) */}
-              {user && (
-                <Link href={`/${user.email.includes('bishop') ? 'bishop' : user.email.includes('protocol') ? 'protocol' : user.email.includes('leader') ? 'leader' : 'member'}/profile`}>
-                  <div className="relative">
-                    <ProfileIcon 
-                      profilePicture={user.profilePicture}
-                      name={user.name}
-                      size="md"
-                      className="hover:border-white/50 border-2 border-white/30 shadow-lg hover:shadow-xl transition-all duration-300"
+              {/* Left – logo + title */}
+              <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
+                <div className="flex-shrink-0">
+                  <div className="bg-white/20 backdrop-blur-md rounded-full p-1.5 sm:p-2 shadow-lg border border-white/30">
+                    <Image
+                      src="/logo.jpg"
+                      alt="G-45 Main Logo"
+                      width={36}
+                      height={36}
+                      className="rounded-full object-cover w-8 h-8 sm:w-9 sm:h-9"
+                      priority
                     />
-                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 border-2 border-white rounded-full"></div>
                   </div>
-                </Link>
-              )}
+                </div>
 
-              {/* Icons Row - Vertical on small/medium, Horizontal on large screens */}
-              <div className="flex flex-col lg:flex-row items-center gap-2">
-                {/* Back Button (if provided) */}
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <h1 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-white truncate leading-tight">
+                      {title}
+                    </h1>
+                    <span className="hidden sm:inline-flex bg-white/20 px-2 py-0.5 rounded-full text-xs font-medium text-white/90 flex-shrink-0">
+                      G-45 Main
+                    </span>
+                  </div>
+                  {subtitle && (
+                    <p className="text-xs text-blue-100 truncate mt-0.5">{subtitle}</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Right – profile avatar + logout icon */}
+              <div className="flex items-center gap-2 flex-shrink-0">
+                {user && (
+                  <Link href={`/${user.email.includes('bishop') ? 'bishop' : user.email.includes('protocol') ? 'protocol' : user.email.includes('leader') ? 'leader' : 'member'}/profile`}>
+                    <div className="relative">
+                      <ProfileIcon
+                        profilePicture={user.profilePicture}
+                        name={user.name}
+                        size="md"
+                        className="hover:border-white/50 border-2 border-white/30 shadow-lg hover:shadow-xl transition-all duration-300"
+                      />
+                      <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-green-400 border-2 border-white rounded-full" />
+                    </div>
+                  </Link>
+                )}
+
                 {backHref && (
                   <Link href={backHref}>
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-white hover:bg-white/10 p-2 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 bg-white/5 border border-white/20"
+                      className="text-white hover:bg-white/10 p-1.5 sm:p-2 rounded-xl bg-white/5 border border-white/20"
                       title="Go Back"
                     >
                       <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -114,13 +125,12 @@ export function ProfessionalHeader({
                   </Link>
                 )}
 
-                {/* Logout Icon (icon only) */}
-                {actions.find(action => action.label === "Logout") && (
+                {actions.find(a => a.label === "Logout") && (
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={actions.find(action => action.label === "Logout")?.onClick}
-                    className="text-white hover:bg-red-500/20 p-2 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 bg-red-500/10 border border-red-300/30"
+                    onClick={actions.find(a => a.label === "Logout")?.onClick}
+                    className="text-white hover:bg-red-500/20 p-1.5 sm:p-2 rounded-xl bg-red-500/10 border border-red-300/30"
                     title="Logout"
                   >
                     <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -130,55 +140,43 @@ export function ProfessionalHeader({
                 )}
               </div>
             </div>
-          </div>
 
-          {/* Action Buttons Row - Below main header on mobile */}
-          {actions.filter(action => action.label !== "Logout").length > 0 && (
-            <div className="flex flex-wrap gap-2 sm:gap-3 justify-start sm:justify-center lg:justify-end">
-              {actions.filter(action => action.label !== "Logout").map((action, index) => (
-                action.href ? (
-                  <Link key={index} href={action.href}>
+            {/* ── Navigation action buttons (non-logout) ── */}
+            {nonLogoutActions.length > 0 && (
+              <div className="flex gap-1.5 sm:gap-2 mt-2 overflow-x-auto scrollbar-hide pb-1">
+                {nonLogoutActions.map((action, index) =>
+                  action.href ? (
+                    <Link key={index} href={action.href} className="flex-shrink-0">
+                      <Button
+                        variant={action.variant || "outline"}
+                        size="sm"
+                        className={`text-xs px-2.5 py-1.5 h-auto whitespace-nowrap transition-all duration-200 hover:scale-105 shadow-sm backdrop-blur-sm border-white/30 text-white bg-white/10 hover:bg-white/20 hover:border-white/50 ${action.className || ""}`}
+                      >
+                        {action.icon && <span className="mr-1">{action.icon}</span>}
+                        {action.label}
+                      </Button>
+                    </Link>
+                  ) : (
                     <Button
+                      key={index}
                       variant={action.variant || "outline"}
                       size="sm"
-                      className={`text-xs sm:text-sm px-2 sm:px-3 py-2 transition-all duration-300 hover:scale-105 shadow-md hover:shadow-lg backdrop-blur-sm ${
-                        action.variant === "outline" 
-                          ? "border-white/30 text-white bg-white/10 hover:bg-white/20 hover:border-white/50" 
-                          : action.variant === "ghost"
-                          ? "text-white hover:bg-white/10"
-                          : "bg-white/90 text-blue-800 hover:bg-white hover:text-blue-900"
-                      } ${action.className || ""}`}
+                      onClick={action.onClick}
+                      className={`flex-shrink-0 text-xs px-2.5 py-1.5 h-auto whitespace-nowrap transition-all duration-200 hover:scale-105 shadow-sm backdrop-blur-sm border-white/30 text-white bg-white/10 hover:bg-white/20 hover:border-white/50 ${action.className || ""}`}
                     >
-                      {action.icon && <span className="mr-1 sm:mr-2">{action.icon}</span>}
+                      {action.icon && <span className="mr-1">{action.icon}</span>}
                       {action.label}
                     </Button>
-                  </Link>
-                ) : (
-                  <Button
-                    key={index}
-                    variant={action.variant || "outline"}
-                    size="sm"
-                    onClick={action.onClick}
-                    className={`text-xs sm:text-sm px-2 sm:px-3 py-2 transition-all duration-300 hover:scale-105 shadow-md hover:shadow-lg backdrop-blur-sm ${
-                      action.variant === "outline" 
-                        ? "border-white/30 text-white bg-white/10 hover:bg-white/20 hover:border-white/50" 
-                        : action.variant === "ghost"
-                        ? "text-white hover:bg-white/10"
-                        : "bg-white/90 text-blue-800 hover:bg-white hover:text-blue-900"
-                    } ${action.className || ""}`}
-                  >
-                    {action.icon && <span className="mr-1 sm:mr-2">{action.icon}</span>}
-                    {action.label}
-                  </Button>
-                )
-              ))}
-            </div>
-          )}
+                  )
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
-    {/* Spacer to push content below the fixed header */}
-    <div className="h-[68px] sm:h-[80px] md:h-[100px]" aria-hidden="true" />
+
+      {/* Dynamic spacer — always matches the actual fixed header height + 20px breathing room */}
+      <div style={{ height: headerHeight + 20 }} aria-hidden="true" />
     </>
   )
 }

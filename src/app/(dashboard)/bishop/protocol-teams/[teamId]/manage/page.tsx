@@ -214,13 +214,13 @@ export default function ProtocolTeamManagePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-blue-300">
+      <div className="min-h-screen bg-blue-300 overflow-x-hidden">
         <ProfessionalHeader
           title="Team Management"
           subtitle="Team Management"
         />
         
-        <div className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-10">
           {/* Tabs Skeleton */}
           <div className="flex flex-col sm:flex-row gap-2 bg-blue-200/90 backdrop-blur-md rounded-lg p-2 border border-blue-300 mb-6">
             <div className="flex-1 h-10 bg-gray-200 animate-pulse rounded"></div>

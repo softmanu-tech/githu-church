@@ -7,6 +7,7 @@ import { UltraFastCardSkeleton, UltraFastChartSkeleton, UltraFastTableSkeleton, 
 import { useAlerts } from "@/components/ui/alert-system"
 import { ProfileIcon } from "@/components/ProfileIcon"
 import { ProfessionalHeader } from "@/components/ProfessionalHeader"
+import { MemberNavStrip } from "@/components/MemberNav"
 import { 
   User, 
   Calendar, 
@@ -201,7 +202,7 @@ export default function MemberDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-blue-300">
+      <div className="min-h-screen bg-blue-300 overflow-x-hidden">
         <ProfessionalHeader
           title="Member Dashboard"
           subtitle="View your attendance and participate in events"
@@ -261,7 +262,7 @@ export default function MemberDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-blue-300">
+    <div className="min-h-screen bg-blue-300 overflow-x-hidden">
       <ProfessionalHeader
         title={`Welcome, ${data.member.name}`}
         subtitle={`${data.member.groups && data.member.groups.length > 0 ? 
@@ -284,8 +285,9 @@ export default function MemberDashboard() {
       />
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
-        <div className="space-y-4 sm:space-y-6">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 pb-6 sm:pb-8 md:pb-10">
+        <MemberNavStrip />
+        <div className="space-y-5 sm:space-y-6">
           
           {/* Member Info Card */}
           <Card className="bg-blue-200/90 backdrop-blur-md border border-blue-300">
@@ -626,6 +628,30 @@ export default function MemberDashboard() {
                   <Button className="bg-blue-600 hover:bg-blue-700 text-white">
                     <Heart className="h-4 w-4 mr-2" />
                     Manage Prayer Requests
+                  </Button>
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Finance Card */}
+          <Card className="bg-blue-200/90 backdrop-blur-md border border-blue-300">
+            <CardHeader className="p-4 sm:p-6">
+              <CardTitle className="text-blue-800 flex items-center gap-2 text-base sm:text-lg">
+                <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
+                Finance & Contributions
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-4 sm:p-6">
+              <div className="text-center">
+                <TrendingUp className="mx-auto h-8 w-8 sm:h-12 sm:w-12 text-blue-400 mb-4" />
+                <p className="text-blue-600 text-sm mb-4">
+                  Record M-Pesa contributions and track your giving across all categories
+                </p>
+                <Link href="/member/finance">
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                    <TrendingUp className="h-4 w-4 mr-2" />
+                    Go to Finance
                   </Button>
                 </Link>
               </div>

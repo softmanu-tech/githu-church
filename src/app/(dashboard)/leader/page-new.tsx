@@ -57,7 +57,7 @@ const ratingColors = {
 
 function LoadingSkeleton() {
   return (
-    <div className="min-h-screen bg-blue-300 p-6">
+    <div className="min-h-screen bg-blue-300 p-6 overflow-x-hidden">
       <div className="max-w-7xl mx-auto">
         <div className="bg-blue-200/90 backdrop-blur-md rounded-lg p-6 animate-pulse">
           <div className="h-8 bg-blue-400 rounded mb-4 w-64"></div>
@@ -172,7 +172,7 @@ export default function LeaderDashboard() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-blue-300 p-6">
+      <div className="min-h-screen bg-blue-300 p-6 overflow-x-hidden">
         <div className="max-w-7xl mx-auto">
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
             Error: {error}
@@ -184,7 +184,7 @@ export default function LeaderDashboard() {
 
   if (!data) {
     return (
-      <div className="min-h-screen bg-blue-300 p-6">
+      <div className="min-h-screen bg-blue-300 p-6 overflow-x-hidden">
         <div className="max-w-7xl mx-auto">
           <div className="bg-blue-200/90 backdrop-blur-md rounded-lg p-6">
             <p className="text-blue-800">No data available.</p>
@@ -195,7 +195,7 @@ export default function LeaderDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-blue-300">
+    <div className="min-h-screen bg-blue-300 overflow-x-hidden">
       {/* Header */}
       <div className="bg-blue-200/90 backdrop-blur-md border-b border-blue-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

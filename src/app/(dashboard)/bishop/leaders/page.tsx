@@ -251,7 +251,7 @@ function LeaderManagementContent() {
     }, [])
 
     return (
-        <div className="min-h-screen bg-blue-300">
+        <div className="min-h-screen bg-blue-300 overflow-x-hidden">
             <ProfessionalHeader
                 title="Leader Management"
                 subtitle={targetGroupId ? "Assign or edit leaders for the selected group" : "Create and manage church leaders"}

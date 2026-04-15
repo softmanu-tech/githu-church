@@ -203,7 +203,7 @@ export default function Inbox() {
   };
 
   return (
-    <div className="min-h-screen bg-blue-300">
+    <div className="min-h-screen bg-blue-300 overflow-x-hidden">
       <ProfessionalHeader 
         title="Inbox"
         subtitle="Your messages and communications"

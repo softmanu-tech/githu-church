@@ -76,13 +76,13 @@ export default function LeaderProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-blue-300">
+      <div className="min-h-screen bg-blue-300 overflow-x-hidden">
         <ProfessionalHeader
           title="Profile Settings"
           subtitle="Loading your profile..."
         />
         
-        <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
+        <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-10">
           <div className="space-y-6">
             <UltraFastCardSkeleton />
             <UltraFastCardSkeleton />
@@ -125,7 +125,7 @@ export default function LeaderProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-blue-300">
+    <div className="min-h-screen bg-blue-300 overflow-x-hidden">
       <ProfessionalHeader
         title="Profile Settings"
         subtitle="Manage your personal information and group member passwords"
@@ -138,7 +138,7 @@ export default function LeaderProfilePage() {
       />
 
       {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
+      <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-10">
         <ProfileManager
           user={user}
           canResetPasswords={true}
