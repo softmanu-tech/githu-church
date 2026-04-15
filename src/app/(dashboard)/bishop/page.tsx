@@ -414,7 +414,7 @@ export default function BishopDashboard() {
     return (
         <div className="min-h-screen bg-blue-300">
             <ProfessionalHeader
-                title="Bishop Dashboard"
+                title="Dashboard"
                 subtitle="Manage your church community"
                 user={bishop ? {
                     name: bishop.name,
